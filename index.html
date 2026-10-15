@@ -162,7 +162,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx5Gu_IijAIlid79RSJkKuk7q5q0vbvfYGPJofVaOkKMy4fJSIc60xOi96qidIUUwDM/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzq-d5FnM7-eRGEObgsA3x_mOfojP2oMLso5JrmexVseTEV-8EDOP8xFZDy_pI1YB2T/exec";
 
         async function fetchData() {
             const indicator = document.getElementById('sync-indicator');
@@ -180,50 +180,66 @@
         }
 
         function renderTable(data) {
-            const container = document.getElementById('table-body');
-            container.innerHTML = data.map(item => {
-                const rateStr = (item.rate || "").toString().toLowerCase().trim();
-                const isUnpaid = rateStr.includes('unpaid') || rateStr === '0' || rateStr === 'no';
-                const displayRate = item.rate ? (item.rate.toString().includes('$') || isUnpaid ? item.rate : '$' + item.rate) : 'Not Specified';
-                
-                return `
-                <tr class="group hover:bg-white/[0.03] transition-colors overflow-hidden">
-                    <td class="px-8 py-6">
-                        <div class="font-bold text-white group-hover:text-indigo-300 transition-colors">${item.company || item.Company || 'N/A'}</div>
-                        <div class="text-xs text-slate-500 font-medium">${item.role || item.Role || 'Data Analyst'}</div>
-                    </td>
-                    <td class="px-6 py-6">
-                        <div class="flex flex-col gap-1">
-                            <span class="inline-flex w-fit px-2 py-0.5 rounded text-[10px] font-bold tracking-tight uppercase ${item.state === 'NY' || item.State === 'NY' ? 'ny-tag' : 'bg-white/5 text-slate-400'}">${item.state || item.State || 'USA'}</span>
-                            <span class="text-xs text-slate-500 italic">${item.mode || item.Mode || 'Remote'}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-6">
-                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status || item.Status)}">
-                            <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
-                            ${item.status || item.Status || 'Applied'}
-                        </span>
-                    </td>
-                    <td class="px-6 py-6 text-sm">
-                        <div class="font-mono font-bold ${isUnpaid ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
-                            ${displayRate}
-                        </div>
-                        <div class="text-[10px] text-slate-500 uppercase font-bold">
-                            ${isUnpaid ? 'Unpaid' : 'Paid'}
-                        </div>
-                    </td>
-                    <td class="px-6 py-6 text-xs text-slate-400">
-                        <div class="font-medium">${item.orgType || item.OrgType || 'For-profit'}</div>
-                        <div class="text-[10px] opacity-60 uppercase tracking-widest">${item.duration || item.Duration || '12 Weeks'}</div>
-                    </td>
-                    <td class="px-8 py-6 text-right">
-                        <button class="p-2 glass rounded-lg hover:bg-indigo-500 hover:text-white transition active:scale-90"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                    </td>
-                </tr>
-            `}).join('');
-            lucide.createIcons();
+    const container = document.getElementById('table-body');
+    container.innerHTML = data.map(item => {
+        // Fix for the "Not Specified" bug:
+        // We check if rate is exactly undefined, null, or empty string.
+        const rawRate = item.rate !== undefined && item.rate !== null && item.rate !== "" ? item.rate : null;
+        const rateStr = (rawRate || "").toString().toLowerCase().trim();
+        
+        // Define if it is unpaid (if it's 0, "unpaid", or "no")
+        const isUnpaid = rateStr === '0' || rateStr.includes('unpaid') || rateStr === 'no';
+        
+        // Decide what to display
+        let displayRate;
+        if (rawRate === null) {
+            displayRate = 'Not Specified';
+        } else if (isUnpaid) {
+            displayRate = 'Unpaid';
+        } else {
+            // Add $ if it's a number and doesn't have one
+            displayRate = rateStr.includes('$') ? item.rate : '$' + item.rate;
         }
-
+        
+        return `
+        <tr class="group hover:bg-white/[0.03] transition-colors overflow-hidden">
+            <td class="px-8 py-6">
+                <div class="font-bold text-white group-hover:text-indigo-300 transition-colors">${item.company || 'N/A'}</div>
+                <div class="text-xs text-slate-500 font-medium">${item.role || 'Data Analyst'}</div>
+            </td>
+            <td class="px-6 py-6">
+                <div class="flex flex-col gap-1">
+                    <span class="inline-flex w-fit px-2 py-0.5 rounded text-[10px] font-bold tracking-tight uppercase ${item.state === 'NY' || (item.state && item.state.includes('NY')) ? 'ny-tag' : 'bg-white/5 text-slate-400'}">
+                        ${item.state || 'USA'}
+                    </span>
+                    <span class="text-xs text-slate-500 italic">${item.mode || 'Remote'}</span>
+                </div>
+            </td>
+            <td class="px-6 py-6">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status)}">
+                    <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
+                    ${item.status || 'Applied'}
+                </span>
+            </td>
+            <td class="px-6 py-6 text-sm">
+                <div class="font-mono font-bold ${isUnpaid || displayRate === 'Not Specified' ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
+                    ${displayRate}
+                </div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold">
+                    ${isUnpaid ? 'Unpaid' : (displayRate === 'Not Specified' ? '—' : 'Paid')}
+                </div>
+            </td>
+            <td class="px-6 py-6 text-xs text-slate-400">
+                <div class="font-medium">${item.orgType || 'Profit'}</div>
+                <div class="text-[10px] opacity-60 uppercase tracking-widest">${item.duration || '—'}</div>
+            </td>
+            <td class="px-8 py-6 text-right">
+                <button class="p-2 glass rounded-lg hover:bg-indigo-500 hover:text-white transition active:scale-90"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+            </td>
+        </tr>
+    `}).join('');
+    lucide.createIcons();
+}
         function getStatusStyle(s) {
             const status = (s || "").toLowerCase();
             if(status.includes('interview')) return 'bg-indigo-400/10 text-indigo-400 border border-indigo-400/20';
