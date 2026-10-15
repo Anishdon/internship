@@ -121,61 +121,74 @@
         // PASTE YOUR GOOGLE SCRIPT URL BELOW
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgWj47YLVS7EPTp3IFFhqKyrI7cL-pm4CdWbPucRlyCGsPbzR3ykJaJuCUpYg0cVA/exec";
 
-        async function fetchData() {
-            const indicator = document.getElementById('sync-indicator');
-            indicator.innerHTML = `Connecting...`;
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const data = await response.json();
-                renderTable(data);
-                updateStats(data);
-                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-2"></span> Live System`;
-            } catch (e) {
-                console.error("Error:", e);
-                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-rose-500 mr-2"></span> Sync Error`;
-            }
+       async function fetchData() {
+    const indicator = document.getElementById('sync-indicator');
+    indicator.innerHTML = `Connecting...`;
+    try {
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
+        
+        // If Google sends an error, don't try to map it
+        if (data.error) {
+            console.error("Google Error:", data.error);
+            indicator.innerHTML = "ID Error";
+            return;
         }
 
-        function renderTable(data) {
-            const container = document.getElementById('table-body');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<tr><td colspan="6" class="text-center py-20 text-slate-500 italic">No applications found. Add one above!</td></tr>';
-                return;
-            }
+        renderTable(data);
+        updateStats(data);
+        indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-2"></span> Live System`;
+    } catch (e) {
+        console.error("Fetch Error:", e);
+        indicator.innerHTML = "Sync Error";
+    }
+}
 
-            container.innerHTML = data.map(item => {
-                const rate = item.rate !== undefined ? item.rate.toString() : "";
-                const isUnpaid = rate === "0" || rate.toLowerCase().includes("unpaid");
-                const displayRate = isUnpaid ? "Unpaid" : (rate ? (rate.includes("$") ? rate : "$" + rate) : "Not Specified");
-                const isNY = (item.state || "").toUpperCase().includes("NY") || (item.state || "").toUpperCase().includes("NEW YORK");
+function renderTable(data) {
+    const container = document.getElementById('table-body');
+    // Ensure data is an array
+    const list = Array.isArray(data) ? data : [];
+    
+    if (list.length === 0) {
+        container.innerHTML = `<tr><td colspan="6" class="px-8 py-10 text-center text-slate-500">No applications found.</td></tr>`;
+        return;
+    }
 
-                return `
-                <tr class="hover:bg-white/[0.02] transition-colors">
-                    <td class="px-8 py-6">
-                        <div class="font-bold text-white">${item.company || 'N/A'}</div>
-                        <div class="text-xs text-slate-500">${item.role || 'Data Analyst'}</div>
-                    </td>
-                    <td class="px-6 py-6">
-                        ${isNY ? '<span class="ny-tag">NY Target</span>' : `<span class="text-sm text-slate-400">${item.state || 'Remote'}</span>`}
-                    </td>
-                    <td class="px-6 py-6">
-                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold ${getStatusStyle(item.status)}">
-                            ${item.status || 'Applied'}
-                        </span>
-                    </td>
-                    <td class="px-6 py-6">
-                        <div class="font-mono font-bold ${isUnpaid ? 'text-slate-500' : 'text-emerald-400'}">${displayRate}</div>
-                        <div class="text-[10px] text-slate-500 uppercase font-bold">${isUnpaid ? 'Unpaid' : 'Paid'}</div>
-                    </td>
-                    <td class="px-6 py-6 text-sm text-slate-400">${item.mode || 'Remote'}</td>
-                    <td class="px-8 py-6 text-right">
-                        ${item.portalUrl ? `<a href="${item.portalUrl}" target="_blank" class="p-2 glass rounded-lg hover:bg-indigo-500 text-slate-400 hover:text-white transition inline-block"><i data-lucide="external-link" class="w-4 h-4"></i></a>` : '—'}
-                    </td>
-                </tr>`;
-            }).join('');
-            lucide.createIcons();
-        }
+    container.innerHTML = list.map(item => {
+        const rateVal = item.rate || "";
+        const rateStr = rateVal.toString().toLowerCase().trim();
+        const isUnpaid = rateStr === '0' || rateStr.includes('unpaid');
+        const displayRate = isUnpaid ? 'Unpaid' : (rateVal ? (rateStr.includes('$') ? rateVal : '$' + rateVal) : 'Not Specified');
+        const portal = item.portalUrl || "";
 
+        return `
+        <tr class="hover:bg-white/[0.03] transition-colors">
+            <td class="px-8 py-6">
+                <div class="font-bold text-white">${item.company || 'N/A'}</div>
+                <div class="text-xs text-slate-500">${item.role || 'Data Analyst'}</div>
+            </td>
+            <td class="px-6 py-6">
+                <span class="${(item.state || "").includes('NY') ? 'ny-tag' : 'text-slate-400 text-xs'}">${item.state || 'USA'}</span>
+            </td>
+            <td class="px-6 py-6 text-xs uppercase font-bold tracking-tighter">
+                ${item.status || 'Applied'}
+            </td>
+            <td class="px-6 py-6 font-mono ${isUnpaid ? 'text-slate-500' : 'text-emerald-400'}">
+                ${displayRate}
+            </td>
+            <td class="px-6 py-6 text-xs text-slate-400">
+                ${item.mode || 'Remote'}
+            </td>
+            <td class="px-8 py-6 text-right">
+                <div class="flex justify-end gap-2">
+                    ${portal ? `<a href="${portal}" target="_blank" class="p-2 glass rounded-lg text-slate-400 hover:text-white"><i data-lucide="external-link" class="w-4 h-4"></i></a>` : ''}
+                    <button class="p-2 glass rounded-lg text-slate-400 hover:text-white"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+    lucide.createIcons();
+}
         function getStatusStyle(s) {
             const status = (s || "").toLowerCase();
             if (status.includes('interview')) return 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20';
