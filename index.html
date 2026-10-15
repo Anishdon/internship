@@ -205,11 +205,23 @@
                             <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
                             ${item.Status || 'Applied'}
                         </span>
-                    </td>
-                    <td class="px-6 py-6">
-                        <div class="text-sm font-mono font-bold text-emerald-400 tracking-tighter">${item.Rate ? '$'+item.Rate+'/hr' : 'Not Specified'}</div>
-                        <div class="text-[10px] text-slate-500 uppercase font-bold">${item.Paid || 'Paid'}</div>
-                    </td>
+                    <td class="px-6 py-6 text-sm">
+    <!-- Logic to check if it's unpaid -->
+    ${(() => {
+        const rateStr = (item.rate || "").toString().toLowerCase().trim();
+        const isUnpaid = rateStr.includes('unpaid') || rateStr === '0' || rateStr === 'no';
+        const displayRate = item.rate ? (item.rate.toString().includes('$') || isUnpaid ? item.rate : '$' + item.rate) : 'Not Specified';
+        
+        return `
+            <div class="font-mono font-bold ${isUnpaid ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
+                ${displayRate}
+            </div>
+            <div class="text-[10px] text-slate-500 uppercase font-bold">
+                ${isUnpaid ? 'Unpaid' : 'Paid'}
+            </div>
+        `;
+    })()}
+</td>
                     <td class="px-6 py-6 text-xs text-slate-400">
                         <div class="font-medium">${item.OrgType || 'For-profit'}</div>
                         <div class="text-[10px] opacity-60 uppercase tracking-widest">${item.Duration || '12 Weeks'}</div>
