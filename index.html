@@ -230,22 +230,39 @@
         }
 
         function updateStats(data) {
-            document.getElementById('stat-total').innerText = data.length;
-            document.getElementById('stat-interviews').innerText = data.filter(d => (d.status || "").toLowerCase().includes('interview')).length;
-            document.getElementById('stat-offers').innerText = data.filter(d => (d.status || "").toLowerCase().includes('offer')).length;
-            
-            // NY Avg Pay Logic
-            const nyRates = data
-                .filter(d => (d.state || "").toUpperCase().includes("NY"))
-                .map(d => {
-                    const r = (d.rate || "").toString().replace(/[^0-9.]/g, '');
-                    return r ? parseFloat(r) : null;
-                })
-                .filter(n => n !== null && n > 0);
-            
-            const avg = nyRates.length ? (nyRates.reduce((a, b) => a + b, 0) / nyRates.length).toFixed(0) : 0;
-            document.getElementById('stat-pay').innerText = `$${avg}/hr`;
-        }
+    // 1. Total Applications
+    document.getElementById('stat-total').innerText = data.length;
+
+    // 2. Count Interviews (Includes 'Pending' and 'Interview' status)
+    document.getElementById('stat-interviews').innerText = data.filter(d => {
+        const s = (d.status || "").toLowerCase();
+        return s.includes('interview') || s.includes('pending');
+    }).length;
+
+    // 3. Count Offers
+    document.getElementById('stat-offers').innerText = data.filter(d => {
+        const s = (d.status || "").toLowerCase();
+        return s.includes('offer');
+    }).length;
+    
+    // 4. Calculate Average Rate for ALL New York based roles
+    const nyRates = data
+        .filter(d => {
+            const state = (d.state || "").toUpperCase();
+            // This now catches "NY", "New York", and "Greene, NY"
+            return state.includes("NY") || state.includes("NEW YORK");
+        })
+        .map(d => {
+            // Extract numbers from strings like "$25/hr" or "25-30"
+            const r = (d.rate || "").toString().replace(/[^0-9.]/g, '');
+            const parsed = parseFloat(r);
+            return !isNaN(parsed) && parsed > 0 ? parsed : null;
+        })
+        .filter(num => num !== null); // Ignore Unpaid and 0
+        
+    const avg = nyRates.length ? (nyRates.reduce((a, b) => a + b, 0) / nyRates.length).toFixed(0) : 0;
+    document.getElementById('stat-pay').innerText = `$${avg}/hr`;
+}
 
         function filterTable() {
             const query = document.getElementById('search').value.toLowerCase();
