@@ -24,7 +24,7 @@
             <div class="flex items-center gap-3">
                 <div class="h-10 w-10 accent-gradient rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">AL</div>
                 <div>
-                    <h1 class="text-lg font-bold tracking-tight">Data Analyst <span class="text-indigo-400">Pipeline</span></h1>
+                    <h1 class="text-lg font-bold tracking-tight text-white">Data Analyst <span class="text-indigo-400">Pipeline</span></h1>
                     <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Spring 2027 Dashboard</p>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <i data-lucide="send" class="w-5 h-5 text-indigo-400 mb-4"></i>
                 <div>
                     <p class="text-slate-400 text-xs font-medium uppercase mb-1">Total Applied</p>
-                    <h3 id="stat-total" class="text-3xl font-bold">0</h3>
+                    <h3 id="stat-total" class="text-3xl font-bold text-white">0</h3>
                 </div>
             </div>
             <div class="glass p-6 rounded-2xl border-l-4 border-indigo-500">
@@ -58,7 +58,7 @@
             <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500">
                 <i data-lucide="dollar-sign" class="w-5 h-5 text-emerald-400 mb-4"></i>
                 <div>
-                    <p class="text-slate-400 text-xs font-medium uppercase mb-1">Avg Rate (Paid)</p>
+                    <p class="text-slate-400 text-xs font-medium uppercase mb-1">Avg Rate (NY Target)</p>
                     <h3 id="stat-pay" class="text-3xl font-bold text-emerald-500">$0/hr</h3>
                 </div>
             </div>
@@ -75,10 +75,10 @@
             <div class="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between gap-4 bg-white/[0.02]">
                 <div class="relative flex-1 max-w-md">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                    <input type="text" id="search" onkeyup="filterTable()" placeholder="Search Company, State, or Mode..." class="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
+                    <input type="text" id="search" onkeyup="filterTable()" placeholder="Search Company, State, or Mode..." class="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition text-white">
                 </div>
                 <div class="flex gap-2">
-                    <select id="status-filter" onchange="filterTable()" class="bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50">
+                    <select id="status-filter" onchange="filterTable()" class="bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50 text-slate-300">
                         <option value="">All Statuses</option>
                         <option value="Interview">Interview</option>
                         <option value="Applied">Just Submitted</option>
@@ -100,7 +100,7 @@
                             <th class="px-8 py-5 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="divide-y divide-white/5">
+                    <tbody id="table-body" class="divide-y divide-white/5 text-white">
                     </tbody>
                 </table>
             </div>
@@ -110,20 +110,20 @@
     <div id="modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
         <div class="glass w-full max-w-xl rounded-[2.5rem] p-10 relative shadow-2xl border border-indigo-500/20">
             <button onclick="toggleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white transition"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="text-3xl font-bold mb-2">New <span class="text-indigo-400">Opportunity</span></h2>
+            <h2 class="text-3xl font-bold mb-2 text-white">New <span class="text-indigo-400">Opportunity</span></h2>
             <p class="text-slate-400 text-sm mb-8">Enter the details to sync with your Google Sheet.</p>
             <form id="app-form" class="grid grid-cols-2 gap-5">
                 <div class="col-span-2">
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Company Name</label>
-                    <input type="text" name="company" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition">
+                    <input type="text" name="company" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Role</label>
-                    <input type="text" name="role" value="Data Analyst Intern" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition">
+                    <input type="text" name="role" value="Data Analyst Intern" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">State</label>
-                    <input type="text" name="state" placeholder="e.g., NY" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition">
+                    <input type="text" name="state" placeholder="e.g., NY" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Status</label>
@@ -137,11 +137,15 @@
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Rate (e.g. 25 or 20-30)</label>
-                    <input type="text" name="rate" placeholder="0" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition">
+                    <input type="text" name="rate" placeholder="0" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Portal URL</label>
+                    <input type="url" name="portalUrl" placeholder="https://..." class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Work Mode</label>
-                    <select name="mode" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none">
+                    <select name="mode" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none text-slate-300">
                         <option>Remote</option>
                         <option>In-Person</option>
                         <option>Hybrid</option>
@@ -149,9 +153,9 @@
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Organization</label>
-                    <select name="orgType" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none">
-                        <option>For-profit</option>
-                        <option>Non-profit</option>
+                    <select name="orgType" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none text-slate-300">
+                        <option>Profit</option>
+                        <option>Non Profit</option>
                     </select>
                 </div>
                 <div class="col-span-2">
@@ -162,7 +166,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzq-d5FnM7-eRGEObgsA3x_mOfojP2oMLso5JrmexVseTEV-8EDOP8xFZDy_pI1YB2T/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC3Fa1PkgQ2BPIN-mnvVJ5A_CNzziZhcl_-NWr818WSyXUR61IbpAH4Rp3y2q1gA2R/exec";
 
         async function fetchData() {
             const indicator = document.getElementById('sync-indicator');
@@ -180,148 +184,47 @@
         }
 
         function renderTable(data) {
-    const container = document.getElementById('table-body');
-    container.innerHTML = data.map(item => {
-        // Fix for the "Not Specified" bug:
-        // We check if rate is exactly undefined, null, or empty string.
-        const rawRate = item.rate !== undefined && item.rate !== null && item.rate !== "" ? item.rate : null;
-        const rateStr = (rawRate || "").toString().toLowerCase().trim();
-        
-        // Define if it is unpaid (if it's 0, "unpaid", or "no")
-        const isUnpaid = rateStr === '0' || rateStr.includes('unpaid') || rateStr === 'no';
-        
-        // Decide what to display
-        let displayRate;
-        if (rawRate === null) {
-            displayRate = 'Not Specified';
-        } else if (isUnpaid) {
-            displayRate = 'Unpaid';
-        } else {
-            // Add $ if it's a number and doesn't have one
-            displayRate = rateStr.includes('$') ? item.rate : '$' + item.rate;
-        }
-        
-        return `
-        <tr class="group hover:bg-white/[0.03] transition-colors overflow-hidden">
-            <td class="px-8 py-6">
-                <div class="font-bold text-white group-hover:text-indigo-300 transition-colors">${item.company || 'N/A'}</div>
-                <div class="text-xs text-slate-500 font-medium">${item.role || 'Data Analyst'}</div>
-            </td>
-            <td class="px-6 py-6">
-                <div class="flex flex-col gap-1">
-                    <span class="inline-flex w-fit px-2 py-0.5 rounded text-[10px] font-bold tracking-tight uppercase ${item.state === 'NY' || (item.state && item.state.includes('NY')) ? 'ny-tag' : 'bg-white/5 text-slate-400'}">
-                        ${item.state || 'USA'}
-                    </span>
-                    <span class="text-xs text-slate-500 italic">${item.mode || 'Remote'}</span>
-                </div>
-            </td>
-            <td class="px-6 py-6">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status)}">
-                    <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
-                    ${item.status || 'Applied'}
-                </span>
-            </td>
-            <td class="px-6 py-6 text-sm">
-                <div class="font-mono font-bold ${isUnpaid || displayRate === 'Not Specified' ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
-                    ${displayRate}
-                </div>
-                <div class="text-[10px] text-slate-500 uppercase font-bold">
-                    ${isUnpaid ? 'Unpaid' : (displayRate === 'Not Specified' ? '—' : 'Paid')}
-                </div>
-            </td>
-            <td class="px-6 py-6 text-xs text-slate-400">
-                <div class="font-medium">${item.orgType || 'Profit'}</div>
-                <div class="text-[10px] opacity-60 uppercase tracking-widest">${item.duration || '—'}</div>
-            </td>
-            <td class="px-8 py-6 text-right">
-                <button class="p-2 glass rounded-lg hover:bg-indigo-500 hover:text-white transition active:scale-90"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-            </td>
-        </tr>
-    `}).join('');
-    lucide.createIcons();
-}
-        function getStatusStyle(s) {
-            const status = (s || "").toLowerCase();
-            if(status.includes('interview')) return 'bg-indigo-400/10 text-indigo-400 border border-indigo-400/20';
-            if(status.includes('rejected')) return 'bg-rose-400/10 text-rose-400 border border-rose-400/20';
-            if(status.includes('feedback')) return 'bg-amber-400/10 text-amber-400 border border-amber-400/20';
-            if(status.includes('offer')) return 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20';
-            return 'bg-slate-400/10 text-slate-400 border border-white/5';
-        }
-
-        function updateStats(data) {
-            document.getElementById('stat-total').innerText = data.length;
-            document.getElementById('stat-interviews').innerText = data.filter(d => {
-                const s = (d.status || d.Status || "").toLowerCase();
-                return s.includes('interview');
-            }).length;
-            document.getElementById('stat-offers').innerText = data.filter(d => {
-                const s = (d.status || d.Status || "").toLowerCase();
-                return s.includes('offer');
-            }).length;
-            
-            const rates = data
-                .map(d => {
-                    const r = (d.rate || d.Rate || "").toString();
-                    const clean = r.replace(/[^0-9.]/g, '');
-                    return clean ? parseFloat(clean) : null;
-                })
-                .filter(num => num !== null && !isNaN(num));
+            const container = document.getElementById('table-body');
+            container.innerHTML = data.map(item => {
+                const rateVal = item.rate || item.Rate || "";
+                const rateStr = rateVal.toString().toLowerCase().trim();
+                const isUnpaid = rateStr === '0' || rateStr.includes('unpaid') || rateStr === 'no';
                 
-            const avg = rates.length ? (rates.reduce((a, b) => a + b, 0) / rates.length).toFixed(0) : 0;
-            document.getElementById('stat-pay').innerText = `$${avg}/hr`;
-        }
+                let displayRate;
+                if (!rateVal && rateVal !== 0) displayRate = 'Not Specified';
+                else if (isUnpaid) displayRate = 'Unpaid';
+                else displayRate = rateStr.includes('$') ? rateVal : '$' + rateVal;
 
-        function filterTable() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const statusFilter = document.getElementById('status-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('#table-body tr');
-            
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                const matchesSearch = text.includes(query);
-                const matchesStatus = statusFilter === "" || text.includes(statusFilter);
-                row.style.display = matchesSearch && matchesStatus ? "" : "none";
-            });
-        }
-
-        function toggleModal() {
-            document.getElementById('modal').classList.toggle('hidden');
-        }
-
-        document.getElementById('app-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "Syncing with Cloud...";
-            btn.disabled = true;
-
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData);
-            data.dateApplied = new Date().toLocaleDateString();
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
-                btn.innerText = "Success! Saved.";
-                setTimeout(() => {
-                    toggleModal();
-                    fetchData();
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                    e.target.reset();
-                }, 1500);
-            } catch (error) {
-                alert("Error saving: Check if the Web App URL is correct.");
-                btn.innerText = "Error - Try again";
-                btn.disabled = false;
-            }
-        };
-
-        lucide.createIcons();
-        fetchData();
-    </script>
-</body>
-</html>
+                return `
+                <tr class="group hover:bg-white/[0.03] transition-colors">
+                    <td class="px-8 py-6">
+                        <div class="font-bold text-white group-hover:text-indigo-300 transition-colors">${item.company || item.Company || 'N/A'}</div>
+                        <div class="text-xs text-slate-500 font-medium">${item.role || item.Role || 'Data Analyst'}</div>
+                    </td>
+                    <td class="px-6 py-6">
+                        <div class="flex flex-col gap-1">
+                            <span class="inline-flex w-fit px-2 py-0.5 rounded text-[10px] font-bold tracking-tight uppercase ${ (item.state || item.State || "").includes('NY') ? 'ny-tag' : 'bg-white/5 text-slate-400'}">${item.state || item.State || 'USA'}</span>
+                            <span class="text-xs text-slate-500 italic">${item.mode || item.Mode || 'Remote'}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-6">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status || item.Status)}">
+                            <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
+                            ${item.status || item.Status || 'Applied'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-6 text-sm">
+                        <div class="font-mono font-bold ${isUnpaid || displayRate === 'Not Specified' ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
+                            ${displayRate}
+                        </div>
+                        <div class="text-[10px] text-slate-500 uppercase font-bold">
+                            ${isUnpaid ? 'Unpaid' : (displayRate === 'Not Specified' ? '—' : 'Paid')}
+                        </div>
+                    </td>
+                    <td class="px-6 py-6 text-xs text-slate-400">
+                        <div class="font-medium">${item.orgType || item.OrgType || 'Profit'}</div>
+                        <div class="text-[10px] opacity-60 uppercase tracking-widest">${item.duration || item.Duration || '—'}</div>
+                    </td>
+                    <td class="px-8 py-6 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                             ${(item.portalUrl
