@@ -18,6 +18,7 @@
 </head>
 <body class="min-h-screen pb-12">
 
+    <!-- Header Navigation -->
     <nav class="border-b border-white/5 py-4 mb-8 bg-black/50 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -39,6 +40,7 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-6">
+        <!-- Dashboard Stats -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
             <div class="glass p-6 rounded-2xl">
                 <i data-lucide="send" class="w-5 h-5 text-indigo-400 mb-4"></i>
@@ -62,13 +64,14 @@
             </div>
         </div>
 
+        <!-- Filter and Table Section -->
         <div class="glass rounded-3xl overflow-hidden shadow-2xl">
             <div class="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between gap-4">
                 <div class="relative flex-1 max-w-md">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
                     <input type="text" id="search" onkeyup="filterTable()" placeholder="Search Company or Role..." class="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
-                <button onclick="fetchData()" class="p-2.5 glass rounded-xl hover:bg-white/5 transition"><i data-lucide="refresh-cw" class="w-5 h-5 text-slate-400"></i></button>
+                <button onclick="fetchData()" class="p-2.5 glass rounded-xl hover:bg-white/5 transition text-slate-400"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
             </div>
 
             <div class="overflow-x-auto">
@@ -84,117 +87,146 @@
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-white/5">
-                        <!-- Data loaded via JS -->
+                        <!-- Data will be injected here -->
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
 
+    <!-- Add Application Modal -->
     <div id="modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
         <div class="glass w-full max-w-xl rounded-[2.5rem] p-10 relative border border-indigo-500/20">
             <button onclick="toggleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="text-2xl font-bold mb-6 text-white">Add New Application</h2>
+            <h2 class="text-2xl font-bold mb-6 text-white text-center">Add New <span class="text-indigo-400">Application</span></h2>
             <form id="app-form" class="grid grid-cols-2 gap-5">
                 <div class="col-span-2">
-                    <label class="text-[10px] uppercase font-bold text-slate-500">Company</label>
-                    <input type="text" name="company" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
+                    <label class="text-[10px] uppercase font-bold text-slate-500">Company Name</label>
+                    <input type="text" name="company" required class="w-full bg-white/5 border border-white/10 rounded-xl p-4 mt-1 text-white outline-none focus:border-indigo-500 transition">
                 </div>
                 <div>
                     <label class="text-[10px] uppercase font-bold text-slate-500">Role</label>
-                    <input type="text" name="role" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
+                    <input type="text" name="role" value="Data Analyst Intern" required class="w-full bg-white/5 border border-white/10 rounded-xl p-4 mt-1 text-white outline-none focus:border-indigo-500 transition">
                 </div>
                 <div>
                     <label class="text-[10px] uppercase font-bold text-slate-500">State (NY, Remote...)</label>
-                    <input type="text" name="state" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
+                    <input type="text" name="state" placeholder="e.g. NY" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 mt-1 text-white outline-none focus:border-indigo-500 transition">
                 </div>
                 <div class="col-span-2">
                     <label class="text-[10px] uppercase font-bold text-slate-500">Portal URL</label>
-                    <input type="url" name="portalUrl" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
+                    <input type="url" name="portalUrl" placeholder="https://..." class="w-full bg-white/5 border border-white/10 rounded-xl p-4 mt-1 text-white outline-none focus:border-indigo-500 transition">
                 </div>
-                <button type="submit" id="submit-btn" class="col-span-2 accent-gradient text-white font-bold py-4 rounded-2xl mt-4 shadow-xl shadow-indigo-600/20">Save Application</button>
+                <button type="submit" id="submit-btn" class="col-span-2 accent-gradient text-white font-bold py-4 rounded-2xl mt-4 shadow-xl shadow-indigo-600/20 hover:scale-[1.02] transition active:scale-95">Save to Google Database</button>
             </form>
         </div>
     </div>
 
     <script>
-        // PASTE YOUR GOOGLE SCRIPT URL BELOW
+        // 1. UPDATE THIS URL TO YOUR LATEST DEPLOYMENT LINK
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgWj47YLVS7EPTp3IFFhqKyrI7cL-pm4CdWbPucRlyCGsPbzR3ykJaJuCUpYg0cVA/exec";
 
-       async function fetchData() {
-    const indicator = document.getElementById('sync-indicator');
-    indicator.innerHTML = `Connecting...`;
-    try {
-        const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
-        
-        // If Google sends an error, don't try to map it
-        if (data.error) {
-            console.error("Google Error:", data.error);
-            indicator.innerHTML = "ID Error";
-            return;
+        async function fetchData() {
+            const indicator = document.getElementById('sync-indicator');
+            indicator.innerHTML = `Connecting...`;
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                
+                // Debugging: View results in your browser console
+                console.log("Data received:", data);
+
+                // Safety Catch: Ensure Google sent an actual array/list
+                if (data.error || !Array.isArray(data)) {
+                    console.error("Google Script Error:", data.error || "Data is not a list");
+                    indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-rose-500 mr-2"></span> ID Error`;
+                    return;
+                }
+
+                renderTable(data);
+                updateStats(data);
+                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-2"></span> Live System`;
+            } catch (e) {
+                console.error("Fetch Error:", e);
+                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-rose-500 mr-2"></span> Sync Error`;
+            }
         }
 
-        renderTable(data);
-        updateStats(data);
-        indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-2"></span> Live System`;
-    } catch (e) {
-        console.error("Fetch Error:", e);
-        indicator.innerHTML = "Sync Error";
-    }
-}
+        function renderTable(data) {
+            const container = document.getElementById('table-body');
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = '<tr><td colspan="6" class="text-center py-20 text-slate-500 italic">No applications found in the sheet.</td></tr>';
+                return;
+            }
 
-function renderTable(data) {
-    const container = document.getElementById('table-body');
-    // Ensure data is an array
-    const list = Array.isArray(data) ? data : [];
-    
-    if (list.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" class="px-8 py-10 text-center text-slate-500">No applications found.</td></tr>`;
-        return;
-    }
+            container.innerHTML = data.map(item => {
+                // Formatting Rate Column
+                const rawRate = item.rate !== undefined && item.rate !== null && item.rate !== "" ? item.rate : null;
+                const rateStr = (rawRate || "").toString().toLowerCase().trim();
+                const isUnpaid = rateStr === '0' || rateStr.includes('unpaid') || rateStr === 'no';
+                
+                let displayRate;
+                if (rawRate === null) displayRate = 'Not Specified';
+                else if (isUnpaid) displayRate = 'Unpaid';
+                else displayRate = rateStr.includes('$') ? item.rate : '$' + item.rate;
 
-    container.innerHTML = list.map(item => {
-        const rateVal = item.rate || "";
-        const rateStr = rateVal.toString().toLowerCase().trim();
-        const isUnpaid = rateStr === '0' || rateStr.includes('unpaid');
-        const displayRate = isUnpaid ? 'Unpaid' : (rateVal ? (rateStr.includes('$') ? rateVal : '$' + rateVal) : 'Not Specified');
-        const portal = item.portalUrl || "";
+                // NY Badge Logic
+                const stateText = (item.state || "").toUpperCase();
+                const isNY = stateText.includes("NY") || stateText.includes("NEW YORK");
 
-        return `
-        <tr class="hover:bg-white/[0.03] transition-colors">
-            <td class="px-8 py-6">
-                <div class="font-bold text-white">${item.company || 'N/A'}</div>
-                <div class="text-xs text-slate-500">${item.role || 'Data Analyst'}</div>
-            </td>
-            <td class="px-6 py-6">
-                <span class="${(item.state || "").includes('NY') ? 'ny-tag' : 'text-slate-400 text-xs'}">${item.state || 'USA'}</span>
-            </td>
-            <td class="px-6 py-6 text-xs uppercase font-bold tracking-tighter">
-                ${item.status || 'Applied'}
-            </td>
-            <td class="px-6 py-6 font-mono ${isUnpaid ? 'text-slate-500' : 'text-emerald-400'}">
-                ${displayRate}
-            </td>
-            <td class="px-6 py-6 text-xs text-slate-400">
-                ${item.mode || 'Remote'}
-            </td>
-            <td class="px-8 py-6 text-right">
-                <div class="flex justify-end gap-2">
-                    ${portal ? `<a href="${portal}" target="_blank" class="p-2 glass rounded-lg text-slate-400 hover:text-white"><i data-lucide="external-link" class="w-4 h-4"></i></a>` : ''}
-                    <button class="p-2 glass rounded-lg text-slate-400 hover:text-white"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                </div>
-            </td>
-        </tr>`;
-    }).join('');
-    lucide.createIcons();
-}
+                return `
+                <tr class="hover:bg-white/[0.03] transition-colors overflow-hidden group">
+                    <td class="px-8 py-6">
+                        <div class="font-bold text-white group-hover:text-indigo-300 transition-colors">${item.company || 'N/A'}</div>
+                        <div class="text-xs text-slate-500 font-medium">${item.role || 'Data Analyst'}</div>
+                    </td>
+                    <td class="px-6 py-6">
+                        <div class="flex flex-col gap-1">
+                            <span class="inline-flex w-fit px-2 py-0.5 rounded text-[10px] font-bold tracking-tight uppercase ${isNY ? 'ny-tag' : 'bg-white/5 text-slate-400'}">
+                                ${item.state || 'USA'}
+                            </span>
+                            <span class="text-xs text-slate-500 italic opacity-60">${item.mode || 'Remote'}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-6">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status)}">
+                            <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
+                            ${item.status || 'Applied'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-6 text-sm">
+                        <div class="font-mono font-bold ${isUnpaid || displayRate === 'Not Specified' ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
+                            ${displayRate}
+                        </div>
+                        <div class="text-[10px] text-slate-500 uppercase font-bold">
+                            ${isUnpaid ? 'Unpaid' : (displayRate === 'Not Specified' ? '—' : 'Paid')}
+                        </div>
+                    </td>
+                    <td class="px-6 py-6 text-xs text-slate-400 font-medium">
+                        ${item.mode || 'Remote'}
+                    </td>
+                    <td class="px-8 py-6 text-right">
+                        <div class="flex justify-end gap-2">
+                            ${item.portalUrl ? `
+                                <a href="${item.portalUrl}" target="_blank" class="p-2 glass rounded-lg text-slate-400 hover:text-white transition" title="Open Portal">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            ` : ''}
+                            <button class="p-2 glass rounded-lg text-slate-400 hover:text-white transition"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
         function getStatusStyle(s) {
             const status = (s || "").toLowerCase();
-            if (status.includes('interview')) return 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20';
-            if (status.includes('rejected')) return 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
-            if (status.includes('offer')) return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-            return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+            if (status.includes('interview')) return 'bg-indigo-400/10 text-indigo-400 border border-indigo-400/20';
+            if (status.includes('rejected')) return 'bg-rose-400/10 text-rose-400 border border-rose-400/20';
+            if (status.includes('offer')) return 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20';
+            if (status.includes('feedback') || status.includes('pending')) return 'bg-amber-400/10 text-amber-400 border border-amber-400/20';
+            return 'bg-slate-400/10 text-slate-400 border border-white/5';
         }
 
         function updateStats(data) {
@@ -202,18 +234,20 @@ function renderTable(data) {
             document.getElementById('stat-interviews').innerText = data.filter(d => (d.status || "").toLowerCase().includes('interview')).length;
             document.getElementById('stat-offers').innerText = data.filter(d => (d.status || "").toLowerCase().includes('offer')).length;
             
+            // NY Avg Pay Logic
             const nyRates = data
                 .filter(d => (d.state || "").toUpperCase().includes("NY"))
-                .map(d => parseFloat(d.rate.toString().replace(/[^0-9.]/g, '')))
-                .filter(n => !isNaN(n) && n > 0);
+                .map(d => {
+                    const r = (d.rate || "").toString().replace(/[^0-9.]/g, '');
+                    return r ? parseFloat(r) : null;
+                })
+                .filter(n => n !== null && n > 0);
             
             const avg = nyRates.length ? (nyRates.reduce((a, b) => a + b, 0) / nyRates.length).toFixed(0) : 0;
             document.getElementById('stat-pay').innerText = `$${avg}/hr`;
         }
 
-        function toggleModal() { document.getElementById('modal').classList.toggle('hidden'); }
-
-        async function filterTable() {
+        function filterTable() {
             const query = document.getElementById('search').value.toLowerCase();
             const rows = document.querySelectorAll('#table-body tr');
             rows.forEach(row => {
@@ -221,18 +255,28 @@ function renderTable(data) {
             });
         }
 
+        function toggleModal() { document.getElementById('modal').classList.toggle('hidden'); }
+
         document.getElementById('app-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            btn.innerText = "Saving to Google...";
+            btn.innerText = "Syncing with Cloud...";
+            btn.disabled = true;
+
             const formData = new FormData(e.target);
             const payload = Object.fromEntries(formData);
             payload.dateApplied = new Date().toLocaleDateString();
             payload.status = "Applied";
 
-            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-            btn.innerText = "Success!";
-            setTimeout(() => { location.reload(); }, 1000);
+            try {
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+                btn.innerText = "Success! Data Sent.";
+                setTimeout(() => { location.reload(); }, 1200);
+            } catch (error) {
+                alert("Connection error. Check Google Script Permissions.");
+                btn.innerText = "Error - Try again";
+                btn.disabled = false;
+            }
         };
 
         lucide.createIcons();
