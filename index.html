@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alamsal Internships | Data Analyst Pipeline</title>
+    <title>Alamsal Internships | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,8 +11,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: #e2e8f0; }
         .glass { background: rgba(15, 15, 20, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
         .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
-        .ny-tag { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
-        .card-hover:hover { transform: translateY(-2px); border-color: rgba(99, 102, 241, 0.4); }
+        .ny-tag { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
@@ -22,9 +21,9 @@
     <nav class="border-b border-white/5 py-4 mb-8 bg-black/50 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="h-10 w-10 accent-gradient rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">AL</div>
+                <div class="h-10 w-10 accent-gradient rounded-xl flex items-center justify-center font-bold text-white shadow-lg">AL</div>
                 <div>
-                    <h1 class="text-lg font-bold tracking-tight text-white">Data Analyst <span class="text-indigo-400">Pipeline</span></h1>
+                    <h1 class="text-lg font-bold tracking-tight text-white">Data Analyst Pipeline</h1>
                     <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Spring 2027 Dashboard</p>
                 </div>
             </div>
@@ -41,66 +40,51 @@
 
     <main class="max-w-7xl mx-auto px-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-            <div class="glass p-6 rounded-2xl flex flex-col justify-between">
+            <div class="glass p-6 rounded-2xl">
                 <i data-lucide="send" class="w-5 h-5 text-indigo-400 mb-4"></i>
-                <div>
-                    <p class="text-slate-400 text-xs font-medium uppercase mb-1">Total Applied</p>
-                    <h3 id="stat-total" class="text-3xl font-bold text-white">0</h3>
-                </div>
+                <p class="text-slate-400 text-xs font-medium uppercase mb-1">Total Applied</p>
+                <h3 id="stat-total" class="text-3xl font-bold text-white">0</h3>
             </div>
             <div class="glass p-6 rounded-2xl border-l-4 border-indigo-500">
                 <i data-lucide="users" class="w-5 h-5 text-indigo-400 mb-4"></i>
-                <div>
-                    <p class="text-slate-400 text-xs font-medium uppercase mb-1">Interviews</p>
-                    <h3 id="stat-interviews" class="text-3xl font-bold text-indigo-100">0</h3>
-                </div>
+                <p class="text-slate-400 text-xs font-medium uppercase mb-1">Interviews</p>
+                <h3 id="stat-interviews" class="text-3xl font-bold text-white">0</h3>
             </div>
             <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500">
                 <i data-lucide="dollar-sign" class="w-5 h-5 text-emerald-400 mb-4"></i>
-                <div>
-                    <p class="text-slate-400 text-xs font-medium uppercase mb-1">Avg Rate (NY Target)</p>
-                    <h3 id="stat-pay" class="text-3xl font-bold text-emerald-500">$0/hr</h3>
-                </div>
+                <p class="text-slate-400 text-xs font-medium uppercase mb-1">Avg Rate (NY Target)</p>
+                <h3 id="stat-pay" class="text-3xl font-bold text-emerald-500">$0/hr</h3>
             </div>
             <div class="glass p-6 rounded-2xl">
                 <i data-lucide="check-circle" class="w-5 h-5 text-purple-400 mb-4"></i>
-                <div>
-                    <p class="text-slate-400 text-xs font-medium uppercase mb-1">Offers</p>
-                    <h3 id="stat-offers" class="text-3xl font-bold text-purple-400">0</h3>
-                </div>
+                <p class="text-slate-400 text-xs font-medium uppercase mb-1">Offers</p>
+                <h3 id="stat-offers" class="text-3xl font-bold text-white">0</h3>
             </div>
         </div>
 
         <div class="glass rounded-3xl overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between gap-4 bg-white/[0.02]">
+            <div class="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between gap-4">
                 <div class="relative flex-1 max-w-md">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                    <input type="text" id="search" onkeyup="filterTable()" placeholder="Search Company, State, or Mode..." class="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition text-white">
+                    <input type="text" id="search" onkeyup="filterTable()" placeholder="Search Company or Role..." class="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
-                <div class="flex gap-2">
-                    <select id="status-filter" onchange="filterTable()" class="bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50 text-slate-300">
-                        <option value="">All Statuses</option>
-                        <option value="Interview">Interview</option>
-                        <option value="Applied">Just Submitted</option>
-                        <option value="Feedback">Feedback</option>
-                    </select>
-                    <button onclick="fetchData()" class="p-2.5 glass rounded-xl hover:bg-white/5 transition"><i data-lucide="refresh-cw" class="w-5 h-5 text-slate-400"></i></button>
-                </div>
+                <button onclick="fetchData()" class="p-2.5 glass rounded-xl hover:bg-white/5 transition"><i data-lucide="refresh-cw" class="w-5 h-5 text-slate-400"></i></button>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
-                    <thead class="text-slate-500 text-[10px] uppercase tracking-[0.15em] font-bold border-b border-white/5 bg-white/[0.01]">
+                    <thead class="text-slate-500 text-[10px] uppercase tracking-widest font-bold border-b border-white/5 bg-white/[0.01]">
                         <tr>
-                            <th class="px-8 py-5">Company & Role</th>
-                            <th class="px-6 py-5">Location/Mode</th>
-                            <th class="px-6 py-5">Current Status</th>
-                            <th class="px-6 py-5">Rate</th>
-                            <th class="px-6 py-5">Org/Duration</th>
-                            <th class="px-8 py-5 text-right">Actions</th>
+                            <th class="px-8 py-5">Company / Role</th>
+                            <th class="px-6 py-5">Location</th>
+                            <th class="px-6 py-5">Status</th>
+                            <th class="px-6 py-5">Compensation</th>
+                            <th class="px-6 py-5">Mode</th>
+                            <th class="px-8 py-5 text-right">Portal</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="divide-y divide-white/5 text-white">
+                    <tbody id="table-body" class="divide-y divide-white/5">
+                        <!-- Data loaded via JS -->
                     </tbody>
                 </table>
             </div>
@@ -108,123 +92,138 @@
     </main>
 
     <div id="modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
-        <div class="glass w-full max-w-xl rounded-[2.5rem] p-10 relative shadow-2xl border border-indigo-500/20">
-            <button onclick="toggleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white transition"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="text-3xl font-bold mb-2 text-white">New <span class="text-indigo-400">Opportunity</span></h2>
-            <p class="text-slate-400 text-sm mb-8">Enter the details to sync with your Google Sheet.</p>
+        <div class="glass w-full max-w-xl rounded-[2.5rem] p-10 relative border border-indigo-500/20">
+            <button onclick="toggleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold mb-6 text-white">Add New Application</h2>
             <form id="app-form" class="grid grid-cols-2 gap-5">
                 <div class="col-span-2">
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Company Name</label>
-                    <input type="text" name="company" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
+                    <label class="text-[10px] uppercase font-bold text-slate-500">Company</label>
+                    <input type="text" name="company" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Role</label>
-                    <input type="text" name="role" value="Data Analyst Intern" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
+                    <label class="text-[10px] uppercase font-bold text-slate-500">Role</label>
+                    <input type="text" name="role" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">State</label>
-                    <input type="text" name="state" placeholder="e.g., NY" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
-                </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Status</label>
-                    <select name="status" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none text-slate-300">
-                        <option>Just Submitted</option>
-                        <option>Interview Lined Up</option>
-                        <option>Feedback Received</option>
-                        <option>Rejected</option>
-                        <option>Wishlist</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Rate (e.g. 25 or 20-30)</label>
-                    <input type="text" name="rate" placeholder="0" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
-                </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Portal URL</label>
-                    <input type="url" name="portalUrl" placeholder="https://..." class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition text-white">
-                </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Work Mode</label>
-                    <select name="mode" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none text-slate-300">
-                        <option>Remote</option>
-                        <option>In-Person</option>
-                        <option>Hybrid</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Organization</label>
-                    <select name="orgType" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-indigo-500 transition appearance-none text-slate-300">
-                        <option>Profit</option>
-                        <option>Non Profit</option>
-                    </select>
+                    <label class="text-[10px] uppercase font-bold text-slate-500">State (NY, Remote...)</label>
+                    <input type="text" name="state" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
                 </div>
                 <div class="col-span-2">
-                    <button type="submit" id="submit-btn" class="w-full accent-gradient text-white font-bold py-4 rounded-2xl mt-4 shadow-xl shadow-indigo-600/20 hover:scale-[1.02] active:scale-95 transition">Save To Database</button>
+                    <label class="text-[10px] uppercase font-bold text-slate-500">Portal URL</label>
+                    <input type="url" name="portalUrl" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mt-1 text-white outline-none focus:border-indigo-500">
                 </div>
+                <button type="submit" id="submit-btn" class="col-span-2 accent-gradient text-white font-bold py-4 rounded-2xl mt-4 shadow-xl shadow-indigo-600/20">Save Application</button>
             </form>
         </div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC3Fa1PkgQ2BPIN-mnvVJ5A_CNzziZhcl_-NWr818WSyXUR61IbpAH4Rp3y2q1gA2R/exec";
+        // PASTE YOUR GOOGLE SCRIPT URL BELOW
+        const SCRIPT_URL = "PASTE_YOUR_EXACT_EXEC_URL_HERE";
 
         async function fetchData() {
             const indicator = document.getElementById('sync-indicator');
-            indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse"></span> Fetching...`;
+            indicator.innerHTML = `Connecting...`;
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
                 renderTable(data);
                 updateStats(data);
-                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Live System`;
+                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-2"></span> Live System`;
             } catch (e) {
-                console.error("Error fetching data", e);
-                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Sync Error`;
+                console.error("Error:", e);
+                indicator.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-rose-500 mr-2"></span> Sync Error`;
             }
         }
 
         function renderTable(data) {
             const container = document.getElementById('table-body');
+            if (!data || data.length === 0) {
+                container.innerHTML = '<tr><td colspan="6" class="text-center py-20 text-slate-500 italic">No applications found. Add one above!</td></tr>';
+                return;
+            }
+
             container.innerHTML = data.map(item => {
-                const rateVal = item.rate || item.Rate || "";
-                const rateStr = rateVal.toString().toLowerCase().trim();
-                const isUnpaid = rateStr === '0' || rateStr.includes('unpaid') || rateStr === 'no';
-                
-                let displayRate;
-                if (!rateVal && rateVal !== 0) displayRate = 'Not Specified';
-                else if (isUnpaid) displayRate = 'Unpaid';
-                else displayRate = rateStr.includes('$') ? rateVal : '$' + rateVal;
+                const rate = item.rate !== undefined ? item.rate.toString() : "";
+                const isUnpaid = rate === "0" || rate.toLowerCase().includes("unpaid");
+                const displayRate = isUnpaid ? "Unpaid" : (rate ? (rate.includes("$") ? rate : "$" + rate) : "Not Specified");
+                const isNY = (item.state || "").toUpperCase().includes("NY") || (item.state || "").toUpperCase().includes("NEW YORK");
 
                 return `
-                <tr class="group hover:bg-white/[0.03] transition-colors">
+                <tr class="hover:bg-white/[0.02] transition-colors">
                     <td class="px-8 py-6">
-                        <div class="font-bold text-white group-hover:text-indigo-300 transition-colors">${item.company || item.Company || 'N/A'}</div>
-                        <div class="text-xs text-slate-500 font-medium">${item.role || item.Role || 'Data Analyst'}</div>
+                        <div class="font-bold text-white">${item.company || 'N/A'}</div>
+                        <div class="text-xs text-slate-500">${item.role || 'Data Analyst'}</div>
                     </td>
                     <td class="px-6 py-6">
-                        <div class="flex flex-col gap-1">
-                            <span class="inline-flex w-fit px-2 py-0.5 rounded text-[10px] font-bold tracking-tight uppercase ${ (item.state || item.State || "").includes('NY') ? 'ny-tag' : 'bg-white/5 text-slate-400'}">${item.state || item.State || 'USA'}</span>
-                            <span class="text-xs text-slate-500 italic">${item.mode || item.Mode || 'Remote'}</span>
-                        </div>
+                        ${isNY ? '<span class="ny-tag">NY Target</span>' : `<span class="text-sm text-slate-400">${item.state || 'Remote'}</span>`}
                     </td>
                     <td class="px-6 py-6">
-                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status || item.Status)}">
-                            <span class="h-1.5 w-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></span>
-                            ${item.status || item.Status || 'Applied'}
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold ${getStatusStyle(item.status)}">
+                            ${item.status || 'Applied'}
                         </span>
                     </td>
-                    <td class="px-6 py-6 text-sm">
-                        <div class="font-mono font-bold ${isUnpaid || displayRate === 'Not Specified' ? 'text-slate-500' : 'text-emerald-400'} tracking-tighter">
-                            ${displayRate}
-                        </div>
-                        <div class="text-[10px] text-slate-500 uppercase font-bold">
-                            ${isUnpaid ? 'Unpaid' : (displayRate === 'Not Specified' ? '—' : 'Paid')}
-                        </div>
+                    <td class="px-6 py-6">
+                        <div class="font-mono font-bold ${isUnpaid ? 'text-slate-500' : 'text-emerald-400'}">${displayRate}</div>
+                        <div class="text-[10px] text-slate-500 uppercase font-bold">${isUnpaid ? 'Unpaid' : 'Paid'}</div>
                     </td>
-                    <td class="px-6 py-6 text-xs text-slate-400">
-                        <div class="font-medium">${item.orgType || item.OrgType || 'Profit'}</div>
-                        <div class="text-[10px] opacity-60 uppercase tracking-widest">${item.duration || item.Duration || '—'}</div>
-                    </td>
+                    <td class="px-6 py-6 text-sm text-slate-400">${item.mode || 'Remote'}</td>
                     <td class="px-8 py-6 text-right">
-                        <div class="flex items-center justify-end gap-2">
-                             ${(item.portalUrl
+                        ${item.portalUrl ? `<a href="${item.portalUrl}" target="_blank" class="p-2 glass rounded-lg hover:bg-indigo-500 text-slate-400 hover:text-white transition inline-block"><i data-lucide="external-link" class="w-4 h-4"></i></a>` : '—'}
+                    </td>
+                </tr>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function getStatusStyle(s) {
+            const status = (s || "").toLowerCase();
+            if (status.includes('interview')) return 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20';
+            if (status.includes('rejected')) return 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+            if (status.includes('offer')) return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+            return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+        }
+
+        function updateStats(data) {
+            document.getElementById('stat-total').innerText = data.length;
+            document.getElementById('stat-interviews').innerText = data.filter(d => (d.status || "").toLowerCase().includes('interview')).length;
+            document.getElementById('stat-offers').innerText = data.filter(d => (d.status || "").toLowerCase().includes('offer')).length;
+            
+            const nyRates = data
+                .filter(d => (d.state || "").toUpperCase().includes("NY"))
+                .map(d => parseFloat(d.rate.toString().replace(/[^0-9.]/g, '')))
+                .filter(n => !isNaN(n) && n > 0);
+            
+            const avg = nyRates.length ? (nyRates.reduce((a, b) => a + b, 0) / nyRates.length).toFixed(0) : 0;
+            document.getElementById('stat-pay').innerText = `$${avg}/hr`;
+        }
+
+        function toggleModal() { document.getElementById('modal').classList.toggle('hidden'); }
+
+        async function filterTable() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const rows = document.querySelectorAll('#table-body tr');
+            rows.forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
+            });
+        }
+
+        document.getElementById('app-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Saving to Google...";
+            const formData = new FormData(e.target);
+            const payload = Object.fromEntries(formData);
+            payload.dateApplied = new Date().toLocaleDateString();
+            payload.status = "Applied";
+
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+            btn.innerText = "Success!";
+            setTimeout(() => { location.reload(); }, 1000);
+        };
+
+        lucide.createIcons();
+        fetchData();
+    </script>
+</body>
+</html>
